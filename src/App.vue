@@ -1,24 +1,30 @@
 <template>
-  <div id="app">
-    <router-view />
+  <div class="flex flex-col min-h-screen font-Roboto bg-color-primary">
+    <SiteNavigation />
+    <RouterView class="flex-1" v-slot="{ Component }">
+      <Transition name="page">
+        <component :is="Component" />
+      </Transition>
+    </RouterView>
   </div>
 </template>
 
-<script>
-export default {
-  name: "App",
-};
+<script setup>
+// import templates
+import { RouterView } from "vue-router";
+import SiteNavigation from "./components/SiteNavigation.vue";
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss" scoped>
+.page {
+  &-enter {
+    &-active {
+      transition: 600ms ease all;
+    }
 
-a {
-  color: #41b883;
+    &-from {
+      opacity: 0;
+    }
+  }
 }
 </style>

@@ -1,39 +1,73 @@
 <template>
-  <div>
-    <h2>Fund List</h2>
-    <ul>
-      <li v-for="fund in funds" :key="fund.id">
-        <router-link :to="{ name: 'fundDetails', params: { id: fund.id } }">
-          {{ fund.name }}
-        </router-link>
-      </li>
-    </ul>
+  <div v-for="fundes in savedFunds" :key="fundes.id">
+    <FundCard :fundes="fundes" @click="goToFundView(fundes)" />
   </div>
+
+  <p v-if="savedFunds.length === 0">
+    No funds added. To start tracking a fund, search in the field above.
+  </p>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      funds: [],
-    };
-  },
-  mounted() {
-    // Fetch funds from the mock API
-    // You can replace this with actual API calls
-    this.fetchFunds();
-  },
-  methods: {
-    async fetchFunds() {
-      // Simulating API call
-      // Replace with axios.get('/api/funds') for a real API call
-      const response = await import("@/mockApi.js");
-      this.funds = await response.getFunds();
+<script setup>
+import axios from "axios";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { searchFund } from "@/services/apiService";
+import FundCard from "./FundCard.vue";
+
+const savedFunds = ref([]);
+
+const getCities = async () => {
+  if (localStorage.getItem("savedFunds")) {
+    savedFunds.value = JSON.parse(localStorage.getItem("savedFunds"));
+
+    const requests = [];
+    savedFunds.value.forEach((fundes) => {
+      const options = {
+        method: "GET",
+        url: "https://alpha-vantage.p.rapidapi.com/query",
+        params: {
+          keywords: fundes.fund,
+          function: "SYMBOL_SEARCH",
+          datatype: "json",
+        },
+        headers: {
+          "X-RapidAPI-Key":
+            "3bb2e65c46msh20c24c1dbb17bedp13fedcjsnfa67c3830dfc",
+          "X-RapidAPI-Host": "alpha-vantage.p.rapidapi.com",
+        },
+      };
+
+      try {
+        const response = axios.request(options);
+        requests.push(response);
+      } catch (error) {
+        console.error(error);
+        console.log("5");
+      }
+    });
+
+    const weatherData = await Promise.all(requests);
+
+    weatherData.forEach((value, index) => {
+      savedFunds.value[index].weather = value.data;
+    });
+  }
+};
+
+onMounted(async () => {
+  await getCities();
+});
+
+const router = useRouter();
+const goToFundView = (fundes) => {
+  router.push({
+    name: "fundView",
+    params: { fund: fundes.fund },
+    query: {
+      id: fundes.id,
+      name: fundes.fund,
     },
-  },
+  });
 };
 </script>
-
-<style scoped>
-/* Add your component styles here */
-</style>

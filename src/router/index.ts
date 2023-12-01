@@ -1,15 +1,34 @@
 import { createRouter, createWebHistory } from "vue-router";
-import FundList from "@/components/FundList.vue";
-import FundDetails from "@/components/FundDetails.vue";
-
-const routes = [
-  { path: "/", component: FundList },
-  { path: "/fund/:id", name: "fundDetails", component: FundDetails },
-];
+import HomeView from "../views/HomeView.vue";
+import fundView from "../views/fundView.vue";
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: "/",
+      name: "home",
+      component: HomeView,
+      meta: {
+        title: "Home",
+      },
+    },
+    {
+      path: "/fund/:fund",
+      name: "fundView",
+      component: fundView,
+      meta: {
+        title: "Fund",
+      },
+    },
+  ],
+});
+
+router.beforeEach((to, from, next) => {
+  document.title = `${
+    to.params.state ? `${to.params.fundes}, ${to.params.state}` : to.meta.title
+  } | Fund Management System`;
+  next();
 });
 
 export default router;
