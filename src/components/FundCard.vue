@@ -2,32 +2,33 @@
   <div
     class="flex py-4 px-3 bg-color-secondary rounded-md shadow-md cursor-pointer"
   >
-    <div class="flex flex-col flex-1 justify-center">
-      <h2 class="text-3xl">
-        {{ fundes.fund }}
+    <div class="flex flex-col flex-1 justify-center gap-2">
+      <h2 class="text-xl">
+        {{ fundes.data }}
       </h2>
+      <h3 class="text-2xl">
+        {{ fundes.fund }}
+      </h3>
+
+      <h4 class="text-xl">
+        {{ fundes }}
+      </h4>
     </div>
 
     <div class="flex flex-col gap-2 w-2/5 md:w-1/5">
       <p class="text-3xl self-end"></p>
       <div class="flex gap-2 flex-col">
         <div class="text-xs flex justify-between w-full gap-4">
-          <span> Type: </span>
-          <span v-if="fundes">
-            {{ fundes }}
-          </span>
+          <span> Exchange: </span>
+          <span> {{ fundes.fund }} </span>
         </div>
         <div class="text-xs flex justify-between w-full gap-4">
           <span> Currency: </span>
-          <span v-if="fundes">
-            {{ fundes }}
-          </span>
+          <!-- <span> {{ fundes.data.currency }} </span> -->
         </div>
         <div class="text-xs flex justify-between w-full gap-4">
-          <span> Region: </span>
-          <span v-if="fundes">
-            {{ fundes }}
-          </span>
+          <span> Movement: </span>
+          <!-- <span> {{ fundes.data.price_movement.movement }} </span> -->
         </div>
       </div>
     </div>

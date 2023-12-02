@@ -36,7 +36,12 @@
     </div>
 
     <div class="flex flex-col gap-4">
-      <!-- Display search results here if needed -->
+      <Suspense>
+        <FundList />
+        <template #fallback>
+          <FundCardSkeleton />
+        </template>
+      </Suspense>
     </div>
   </main>
 </template>
@@ -45,6 +50,8 @@
 import { ref } from "vue";
 import { searchFund } from "@/services/apiService";
 import { useRouter } from "vue-router";
+import FundCardSkeleton from "../components/FundCardSkeleton.vue";
+import FundList from "../components/FundList.vue";
 
 const searchQuery = ref("");
 const serpApiSearchResults = ref(null);

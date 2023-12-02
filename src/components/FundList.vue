@@ -9,7 +9,6 @@
 </template>
 
 <script setup>
-import axios from "axios";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { searchFund } from "@/services/apiService";
@@ -22,41 +21,21 @@ const getCities = async () => {
     savedFunds.value = JSON.parse(localStorage.getItem("savedFunds"));
 
     const requests = [];
-    savedFunds.value.forEach((fundes) => {
-      const options = {
-        method: "GET",
-        url: "https://alpha-vantage.p.rapidapi.com/query",
-        params: {
-          keywords: fundes.fund,
-          function: "SYMBOL_SEARCH",
-          datatype: "json",
-        },
-        headers: {
-          "X-RapidAPI-Key":
-            "3bb2e65c46msh20c24c1dbb17bedp13fedcjsnfa67c3830dfc",
-          "X-RapidAPI-Host": "alpha-vantage.p.rapidapi.com",
-        },
-      };
-
+    savedFunds.value.forEach(async (fundes) => {
       try {
-        const response = axios.request(options);
-        requests.push(response);
+        const fundData = await searchFund(fundes.fund);
+        fundes.data = fundData;
       } catch (error) {
         console.error(error);
         console.log("5");
       }
-    });
-
-    const weatherData = await Promise.all(requests);
-
-    weatherData.forEach((value, index) => {
-      savedFunds.value[index].weather = value.data;
     });
   }
 };
 
 onMounted(async () => {
   await getCities();
+  console.log("test");
 });
 
 const router = useRouter();
