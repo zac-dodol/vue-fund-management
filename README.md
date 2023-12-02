@@ -1,6 +1,6 @@
 # fund_management_system
 
-This project is to find and show details of stocks, etf and cryptocurrency while maintaining a list for quick view.
+This project is to find and show details of stocks, etf and cryptocurrency while maintaining a list for quick view. CORS needs to be enable as this project does not have a backend to secure the API.
 
 ## Recommended IDE Setup
 
