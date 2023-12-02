@@ -15,35 +15,25 @@
       <h1 class="text-4xl mb-2 bg-color-secondary p-4 rounded-md">
         {{ route.params.fund }}
       </h1>
-      <ul
-        v-if="fundDetails"
-        class="text-sm mb-12 w-full"
-        v-for="searchResult in fundDetails.bestMatches"
-        :key="searchResult.id"
-      >
+      <ul v-if="fundDetails" class="text-sm mb-12 w-full">
         <li class="flex justify-between w-full gap-16">
-          <span> Symbol: </span>
-          {{ searchResult["1. symbol"] }}
+          <span> Exchange: </span>
+          {{ fundDetails.exchange }}
         </li>
 
         <li class="flex justify-between w-full gap-16">
           <span> Name: </span>
-          {{ searchResult["2. name"] }}
+          {{ fundDetails.title }}
         </li>
 
         <li class="flex justify-between w-full gap-16">
-          <span> Type: </span>
-          {{ searchResult["3. type"] }}
+          <span> Price: </span>
+          {{ fundDetails.extracted_price }}
         </li>
 
         <li class="flex justify-between w-full gap-16">
-          <span> Region: </span>
-          {{ searchResult["4. region"] }}
-        </li>
-
-        <li class="flex justify-between w-full gap-16">
-          <span> Match Score: </span>
-          {{ searchResult["9. matchScore"] }}
+          <span> Currency: </span>
+          {{ fundDetails.currency }}
         </li>
       </ul>
     </div>
@@ -72,6 +62,7 @@ const route = useRoute();
 onMounted(async () => {
   try {
     fundDetails.value = await searchFund(route.params.fund);
+    console.log(fundDetails.value);
   } catch (error) {
     console.error(error);
     // Handle error
